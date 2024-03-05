@@ -17,7 +17,7 @@ export const ScoreComponent = () => {
         });
         setCorrectAnswers(data);
         setScore(quizOptions.length - correctAnswer.length);
-    }, [userAnswer, quizOptions, correctAnswer.length])
+    }, [userAnswer, quizOptions, correctAnswer.length]);
     const getScoreColor = (score) => {
         let style = {marginTop: '20px', color: 'black'};
         switch (true) {
@@ -65,9 +65,7 @@ export const ScoreComponent = () => {
                     <span>{quizItem.question}</span>
                     <ul>
                         {[quizItem?.correct_answer, ...quizItem?.incorrect_answers].sort().map((answer, answerIndex) => (
-                            <button key={answerIndex}
-                                    style={getAnswerStyle(index, answer)}
-                            >{answer}</button>
+                            <button key={answerIndex} style={getAnswerStyle(index, answer)}>{answer}</button>
                         ))}
                     </ul>
 

@@ -1,9 +1,18 @@
+const url = 'https://opentdb.com';
+
 export const CategoryService = async () => {
-    const response = await fetch('https://opentdb.com/api_category.php');
-    return await response.json();
+    const response = await fetch(`${url}/api_category.php`);
+    return response.json();
 }
 
 export const QuizService = async (args) => {
-    const response = await fetch(`https://opentdb.com/api.php?amount=5&category=${args.categoryId}&difficulty=${args.difficultyLevel}&type=multiple`);
-    return await response.json();
+    try {
+        const response = await fetch(`${url}/api.php?amount=5&category=${args.categorySelect}&difficulty=${args.difficultySelect}&type=multiple`);
+        if(!response.ok) {
+            console.error(`something wrong ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
 }

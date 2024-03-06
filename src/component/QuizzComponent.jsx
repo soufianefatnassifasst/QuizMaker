@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
-const QuizzComponent = ({quizOptions}) => {
+const QuizzComponent = () => {
+    const location = useLocation();
+    const quizOptions = location.state;
     const navigate = useNavigate();
     const [userAnswer, setUserAnswer] = useState([]);
     const [isQuizComplete, setIsQuizComplete] = useState(false);

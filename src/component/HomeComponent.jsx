@@ -3,11 +3,12 @@ import {CategoryService, QuizService} from "../services/api_services.mjs";
 import { useForm } from 'react-hook-form';
 import SelectComponent from "./SelectComponent";
 import {difficultyOptions} from "../const/difficultyOptions";
-import QuizzComponent from "./QuizzComponent";
+import { useNavigate} from "react-router-dom";
 
 const HomeComponent = () => {
+    const navigate = useNavigate();
     const [categoryOptions, setCategoryOptions] = useState([]);
-    const [quizOptions, setQuizOptions] = useState([]);
+
     const [messageError, setMessageError] = useState('');
 
     const { register, watch , handleSubmit} = useForm({
@@ -36,16 +37,17 @@ const HomeComponent = () => {
     const onSubmit = async (data) => {
         if (data.categorySelect && data.difficultySelect) {
             try{
-                const response = await QuizService(data);
-                if(response.results > 0) {
-                    setQuizOptions(response.results);
+                const response = await QuizService({
+                    categorySelect: data.categorySelect, difficultySelect: difficultyOptions[data.difficultySelect].name
+                });
+                if(response && response.results.length > 0) {
+                    navigate('/quiz', {state: response.results});
                 } else {
                     setMessageError('No results found');
                 }
             } catch(error) {
                 throw error;
             }
-
         }
     }
 
@@ -57,7 +59,7 @@ const HomeComponent = () => {
                 <SelectComponent name='difficultySelect' placeHolder='Select difficulty' register={register} options={difficultyOptions} />
                 <button id='createBtn' type='submit' disabled={!isSubmitEnabled} >Create</button>
             </form>
-            {(quizOptions.length > 0) ? <QuizzComponent quizOptions={quizOptions} /> : `${messageError}`}
+          {messageError}
         </div>);
 }
 

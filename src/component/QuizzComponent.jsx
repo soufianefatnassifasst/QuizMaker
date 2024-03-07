@@ -54,7 +54,7 @@ return (
             <div key={index}>
                 <span>{quizItem.question}</span>
                 <ul>
-                    {[quizItem?.correct_answer, ...quizItem?.incorrect_answers].sort().map((answer, answerIndex) => (
+                    {quizItem?.allAnswers.map((answer, answerIndex) => (
                         <button key={answerIndex}
                                 style={getAnswerStyle(index, answer, hoveredButton === `${index}-${answer}`)}
                                 onMouseEnter={() => setHoveredButton(`${index}-${answer}`)}

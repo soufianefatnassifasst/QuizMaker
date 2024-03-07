@@ -57,7 +57,7 @@ export const ScoreComponent = () => {
     }
 
     return(
-    <div>
+    <>
         <h3>RESULTS</h3>
         <div style={{marginTop: '20px'}}>
             {quizOptions && quizOptions.map((quizItem, index) => (
@@ -76,7 +76,7 @@ export const ScoreComponent = () => {
             <span>You scored {score} out of {quizOptions.length}</span>
         </div>
         <button onClick={() => navigate('/')}>Create a new quiz</button>
-    </div>);
+    </>);
 }
 
 export default ScoreComponent;

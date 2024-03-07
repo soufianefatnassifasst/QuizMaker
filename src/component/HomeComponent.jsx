@@ -41,6 +41,10 @@ const HomeComponent = () => {
                     categorySelect: data.categorySelect, difficultySelect: difficultyOptions[data.difficultySelect].name
                 });
                 if(response && response.results.length > 0) {
+                    response.results= response.results.map((item, index) => {
+                        const allAnswers = [item?.correct_answer, ...item?.incorrect_answers];
+                        return {...item, allAnswers: allAnswers.sort(() => 0.5 - Math.random())};
+                    });
                     navigate('/quiz', {state: response.results});
                 } else {
                     setMessageError('No results found');
@@ -57,7 +61,7 @@ const HomeComponent = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <SelectComponent name='categorySelect' placeHolder='Select a Category' register={register} options={categoryOptions} />
                 <SelectComponent name='difficultySelect' placeHolder='Select difficulty' register={register} options={difficultyOptions} />
-                <button id='createBtn' type='submit' disabled={!isSubmitEnabled} >Create</button>
+                <button id='createBtn' disabled={!isSubmitEnabled}>Create</button>
             </form>
           {messageError}
         </div>);

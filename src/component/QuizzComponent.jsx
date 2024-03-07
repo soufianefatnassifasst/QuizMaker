@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 
 const QuizzComponent = () => {
@@ -6,14 +6,7 @@ const QuizzComponent = () => {
     const quizOptions = location.state;
     const navigate = useNavigate();
     const [userAnswer, setUserAnswer] = useState([]);
-    const [isQuizComplete, setIsQuizComplete] = useState(false);
     const [hoveredButton, setHoveredButton] = useState(null);
-
-    useEffect(() => {
-        if (quizOptions) {
-            setIsQuizComplete(userAnswer.length === quizOptions.length);
-        }
-    }, [userAnswer, quizOptions]);
 
     const getAnswerStyle = (questionIndex, answer, isHovered) => {
         let style = {
@@ -45,7 +38,7 @@ const QuizzComponent = () => {
         });
     }
     const submitQuiz = () => {
-        navigate('/score', {state: {quizOptions, userAnswer}});
+       navigate('/score', {state: {quizOptions, userAnswer}});
     }
 return (
     <>
@@ -66,7 +59,7 @@ return (
         ))}
     </div>
 
-    {isQuizComplete &&
+    {(userAnswer.length === quizOptions.length) &&
     <button onClick={submitQuiz}>Submit</button>}
     </>
 )

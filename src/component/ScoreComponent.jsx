@@ -1,23 +1,14 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 
 export const ScoreComponent = () => {
     const location = useLocation();
     const {quizOptions, userAnswer} = location.state;
     const navigate = useNavigate();
-    const [score, setScore]= useState(0);
-    const [correctAnswer, setCorrectAnswers]= useState([]);
-
-    useEffect(() =>{
-        const data = [];
-        userAnswer.forEach((item) => {
-            if (quizOptions[item.id]?.correct_answer !== item.answer) {
-                data.push({id: item.id, correctAnswer: quizOptions[item.id]?.correct_answer})
-            }
-        });
-        setCorrectAnswers(data);
-        setScore(quizOptions.length - correctAnswer.length);
-    }, [userAnswer, quizOptions, correctAnswer.length]);
+    const inCorrectAnswer = userAnswer
+        .filter(item=> quizOptions[item.id]?.correct_answer !== item.answer)
+        .map((item) => ({id: item.id, correctAnswer: quizOptions[item.id]?.correct_answer}));
+    const score = quizOptions.length - inCorrectAnswer.length;
     const getScoreColor = (score) => {
         let style = {marginTop: '20px', color: 'black'};
         switch (true) {
@@ -32,17 +23,18 @@ export const ScoreComponent = () => {
         }
     }
 
-    const getAnswerStyle = (questionIndex, answer) => {
+   const getAnswerStyle = (questionIndex, answer) => {
         const baseStyle = {
             cursor: 'pointer',
             margin: '5px',
             padding: '10px',
             borderRadius: '5px'
         };
-        const isSelected = userAnswer.some(a => a.id === questionIndex && a.answer === answer);
-        const isCorrect = correctAnswer.some(inc => inc.id === questionIndex && inc.correctAnswer === answer);
-        const isInCorrect = correctAnswer.some(inc => inc.id === questionIndex && inc.correctAnswer !== answer);
 
+        const isSelected = userAnswer.some(a => a.id === questionIndex && a.answer === answer);
+
+        const isCorrect = inCorrectAnswer.some(inc => inc.id === questionIndex && inc.correctAnswer === answer);
+        const isInCorrect = inCorrectAnswer.some(inc => inc.id === questionIndex && inc.correctAnswer !== answer);
         let style = {...baseStyle, color: 'green'};
 
             if(isSelected || isCorrect) {
@@ -64,7 +56,7 @@ export const ScoreComponent = () => {
                 <div key={index}>
                     <span>{quizItem.question}</span>
                     <ul>
-                        {[quizItem?.correct_answer, ...quizItem?.incorrect_answers].sort().map((answer, answerIndex) => (
+                        {quizItem.allAnswers.map((answer, answerIndex) => (
                             <button key={answerIndex} style={getAnswerStyle(index, answer)}>{answer}</button>
                         ))}
                     </ul>
